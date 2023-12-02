@@ -3,6 +3,7 @@
 #include <string>
 #include <iomanip>
 #include "gestion.h"
+
 using namespace std;
 
 /*
@@ -83,7 +84,6 @@ void ajoutersurlefichier()
 	profession = listeprofessions(); // Utilisation de la fonction pour choisir la profession
 
 	fichier << profession << "\n";
-
 	// Fermeture du fichier
 	fichier.close();
 }
