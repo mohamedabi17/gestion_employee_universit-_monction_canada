@@ -32,7 +32,6 @@ string listeprofessions()
 }
 
 // Ajoute les informations saisies au fichier "personnel.dat"
-// Ajoute les informations saisies au fichier "personnel.dat"
 void ajoutersurlefichier()
 {
 	ofstream fichier("personnel.dat", ios::app); // Ouverture du fichier en mode ajout
@@ -250,30 +249,106 @@ Fonction : Affiche les informations d'un-e employe-e existant
 */
 void consulter()
 {
-}
+	int matricule;
+	cout << "Saisissez le matricule de l'employe-e que vous souhaitez consulter : ";
+	cin >> matricule;
 
+	// Check if the employee with the given matricule exists
+	if (employeexiste(matricule))
+	{
+		ifstream fichier("personnel.dat");
+
+		if (!fichier)
+		{
+			cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
+			return;
+		}
+
+		int currentMatricule;
+		string nom, profession;
+		int annee;
+		double salaire;
+
+		bool found = false;
+
+		while (fichier >> currentMatricule >> nom >> annee >> salaire >> profession)
+		{
+			if (currentMatricule == matricule)
+			{
+				found = true;
+				cout << "\n=======================================\n";
+				cout << "Informations de l'employe-e\n";
+				cout << "=======================================\n";
+				cout << "Matricule : " << currentMatricule << "\n";
+				cout << "Nom : " << nom << "\n";
+				cout << "Annee de recrutement : " << annee << "\n";
+				cout << "Salaire horaire : " << salaire << "\n";
+				cout << "Profession : " << profession << "\n";
+				cout << "=======================================\n";
+				break;
+			}
+		}
+
+		fichier.close();
+	}
+	else
+	{
+		cout << "ERREUR : Employe-e inexistant-e" << endl;
+	}
+}
+/*
+Fonction : imprime la liste des employe-es par matricule :
+entete
+*/
 /*
 Fonction : imprime la liste des employe-es par matricule :
 entete
 */
 void entete_listematricule()
 {
+	cout << "\n=========================================\n";
+	cout << "Liste des employe-es par matricule\n";
+	cout << "=========================================\n";
+	cout << setw(15) << "Matricule" << setw(20) << "Nom" << setw(20) << "Profession"
+		 << "\n";
+	cout << "-----------------------------------------\n";
 }
 
 /*
 Fonction : imprime la liste des employe-es par matricule :
 corps
 */
+/*
+Fonction : imprime la liste des employe-es par matricule :
+corps
+*/
 void corps_listematricule()
 {
-}
+	ifstream fichier("personnel.dat");
 
+	if (!fichier)
+	{
+		cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
+		return;
+	}
+
+	int matricule;
+	string nom, profession;
+
+	while (fichier >> matricule >> nom >> annee >> salaireh >> profession)
+	{
+		cout << setw(15) << matricule << setw(20) << nom << setw(20) << profession << "\n";
+	}
+
+	fichier.close();
+}
 /*
 Fonction : imprime la liste des employe-es par matricule :
 bas
 */
 void bas_listematricule()
 {
+	cout << "=========================================\n";
 }
 
 /*
@@ -295,8 +370,13 @@ entete
 */
 void entete_liste2semaines()
 {
+	cout << "\n=========================================\n";
+	cout << "Liste des salaires par deux semaines\n";
+	cout << "=========================================\n";
+	cout << setw(15) << "Matricule" << setw(20) << "Nom" << setw(20) << "Salaire horaire"
+		 << "\n";
+	cout << "-----------------------------------------\n";
 }
-
 /*
 Fonction : imprime la paye des employe-es au deux semaines
 dans le fichier paie.dat
@@ -304,6 +384,24 @@ corps
 */
 void corps_liste2semaines()
 {
+	ifstream fichier("personnel.dat");
+
+	if (!fichier)
+	{
+		cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
+		return;
+	}
+
+	int matricule;
+	string nom, profession;
+	double salaire;
+
+	while (fichier >> matricule >> nom >> annee >> salaire >> profession)
+	{
+		cout << setw(15) << matricule << setw(20) << nom << setw(20) << salaire << "\n";
+	}
+
+	fichier.close();
 }
 
 /*
@@ -313,6 +411,7 @@ bas
 */
 void bas_liste2semaines()
 {
+	cout << "=========================================\n";
 }
 
 /*
@@ -332,6 +431,30 @@ Fonction : imprime la liste des employes dans le fichier employees.dat
 */
 void listeemployees()
 {
+	ifstream fichier("personnel.dat");
+
+	if (!fichier)
+	{
+		cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
+		return;
+	}
+
+	int matricule;
+	string nom, profession;
+
+	cout << "\n=====================================\n";
+	cout << "Liste des employe-es\n";
+	cout << "=====================================\n";
+	cout << setw(15) << "Matricule" << setw(20) << "Nom" << setw(20) << "Profession"
+		 << "\n";
+	cout << "--------------------------------------\n";
+
+	while (fichier >> matricule >> nom >> annee >> salaireh >> profession)
+	{
+		cout << setw(15) << matricule << setw(20) << nom << setw(20) << profession << "\n";
+	}
+
+	fichier.close();
 }
 
 /*
