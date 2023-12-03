@@ -3,9 +3,35 @@
 #include <string>
 #include <iomanip>
 #include "gestion.h"
-
 using namespace std;
 
+// Function to display the content of personnel.dat
+void afficherPersonnel()
+{
+	// ifstream fichier("personnel.dat"); // Ouverture du fichier en mode lecture
+	ifstream fichier;
+	// Au debut on suppose que l'employe-e n'existe pas
+	fichier.open("personnel.dat", std::ios::in);
+	if (!fichier)
+	{
+		cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
+		return;
+	}
+
+	string line;
+
+	cout << "\n===================================\n";
+	cout << "Contenu du fichier personnel.dat :\n";
+	cout << "===================================\n";
+
+	while (getline(fichier, line))
+	{
+		cout << line << endl;
+	}
+
+	// Fermeture du fichier
+	fichier.close();
+}
 /*
 Fonction : liste des professions
 */
@@ -32,6 +58,7 @@ string listeprofessions()
 }
 
 // Ajoute les informations saisies au fichier "personnel.dat"
+
 void ajoutersurlefichier()
 {
 	ofstream fichier("personnel.dat", ios::app); // Ouverture du fichier en mode ajout
@@ -83,8 +110,10 @@ void ajoutersurlefichier()
 	profession = listeprofessions(); // Utilisation de la fonction pour choisir la profession
 
 	fichier << profession << "\n";
+
 	// Fermeture du fichier
 	fichier.close();
+	afficherPersonnel();
 }
 
 /*
@@ -238,90 +267,42 @@ bool employeexiste(int matricule)
 }
 
 /*
-Fonction : ajoute un nouveau employe
-*/
-void nouveau()
-{
-}
-
-/*
 Fonction : Affiche les informations d'un-e employe-e existant
 */
+
 void consulter()
 {
 	int matricule;
-	cout << "Saisissez le matricule de l'employe-e que vous souhaitez consulter : ";
+	cout << "Matricule de l'employe-e : ";
 	cin >> matricule;
 
-	// Check if the employee with the given matricule exists
-	if (employeexiste(matricule))
+	if (!employeexiste(matricule))
 	{
-		ifstream fichier("personnel.dat");
-
-		if (!fichier)
-		{
-			cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
-			return;
-		}
-
-		int currentMatricule;
-		string nom, profession;
-		int annee;
-		double salaire;
-
-		bool found = false;
-
-		while (fichier >> currentMatricule >> nom >> annee >> salaire >> profession)
-		{
-			if (currentMatricule == matricule)
-			{
-				found = true;
-				cout << "\n=======================================\n";
-				cout << "Informations de l'employe-e\n";
-				cout << "=======================================\n";
-				cout << "Matricule : " << currentMatricule << "\n";
-				cout << "Nom : " << nom << "\n";
-				cout << "Annee de recrutement : " << annee << "\n";
-				cout << "Salaire horaire : " << salaire << "\n";
-				cout << "Profession : " << profession << "\n";
-				cout << "=======================================\n";
-				break;
-			}
-		}
-
-		fichier.close();
+		cout << "Aucun employe-e avec le matricule " << matricule << " n'a été trouvé." << endl;
+		return;
 	}
-	else
-	{
-		cout << "ERREUR : Employe-e inexistant-e" << endl;
-	}
+
+	// Afficher les informations de l'employe-e (à compléter avec votre code)
+	// ...
+
+	// Exemple d'affichage :
+	cout << "Informations pour l'employe-e avec le matricule " << matricule << " :\n";
+	cout << "Nom : " << nom << "\n";
+	cout << "Annee de recrutement : " << annee << "\n";
+	cout << "Salaire horaire : " << salaireh << "\n";
+	cout << "Profession : " << profession << "\n";
 }
-/*
-Fonction : imprime la liste des employe-es par matricule :
-entete
-*/
 /*
 Fonction : imprime la liste des employe-es par matricule :
 entete
 */
 void entete_listematricule()
 {
-	cout << "\n=========================================\n";
-	cout << "Liste des employe-es par matricule\n";
-	cout << "=========================================\n";
-	cout << setw(15) << "Matricule" << setw(20) << "Nom" << setw(20) << "Profession"
-		 << "\n";
-	cout << "-----------------------------------------\n";
+	cout << "\n+------+---------+--------------------+------+\n";
+	cout << "|Numero|Matricule| Nom                |Annee |\n";
+	cout << "|------|---------|--------------------|------|\n";
 }
 
-/*
-Fonction : imprime la liste des employe-es par matricule :
-corps
-*/
-/*
-Fonction : imprime la liste des employe-es par matricule :
-corps
-*/
 void corps_listematricule()
 {
 	ifstream fichier("personnel.dat");
@@ -335,20 +316,24 @@ void corps_listematricule()
 	int matricule;
 	string nom, profession;
 
+	int numero = 1;
+
 	while (fichier >> matricule >> nom >> annee >> salaireh >> profession)
 	{
-		cout << setw(15) << matricule << setw(20) << nom << setw(20) << profession << "\n";
+		cout << "|" << setw(6) << numero << "|" << setw(9) << matricule << "|" << setw(20) << nom << "|" << setw(6) << annee << " |\n";
+		numero++;
 	}
 
 	fichier.close();
 }
+
 /*
 Fonction : imprime la liste des employe-es par matricule :
 bas
 */
 void bas_listematricule()
 {
-	cout << "=========================================\n";
+	cout << "+------+---------+--------------------+------+\n";
 }
 
 /*
@@ -370,12 +355,9 @@ entete
 */
 void entete_liste2semaines()
 {
-	cout << "\n=========================================\n";
-	cout << "Liste des salaires par deux semaines\n";
-	cout << "=========================================\n";
-	cout << setw(15) << "Matricule" << setw(20) << "Nom" << setw(20) << "Salaire horaire"
-		 << "\n";
-	cout << "-----------------------------------------\n";
+	cout << "\n+------+---------+--------------------+---------------+------------------+\n";
+	cout << "|Numero|Matricule| Nom                |Salaire horaire|Paie de 2 semaines|\n";
+	cout << "|------|---------|--------------------|---------------|------------------|\n";
 }
 /*
 Fonction : imprime la paye des employe-es au deux semaines
@@ -396,9 +378,16 @@ void corps_liste2semaines()
 	string nom, profession;
 	double salaire;
 
+	int numero = 1;
+
 	while (fichier >> matricule >> nom >> annee >> salaire >> profession)
 	{
-		cout << setw(15) << matricule << setw(20) << nom << setw(20) << salaire << "\n";
+		double paie2semaines = salaire * 2 * 40; // Assuming 40 working hours per week
+
+		cout << "|" << setw(6) << numero << "|" << setw(9) << matricule << "|" << setw(20) << nom
+			 << "|" << setw(15) << fixed << setprecision(2) << salaire << "|" << setw(18) << fixed << setprecision(2) << paie2semaines << " |\n";
+
+		numero++;
 	}
 
 	fichier.close();
@@ -411,7 +400,30 @@ bas
 */
 void bas_liste2semaines()
 {
-	cout << "=========================================\n";
+	double totalPaie = 0.0;
+
+	ifstream fichier("personnel.dat");
+
+	if (!fichier)
+	{
+		cerr << "Erreur : Impossible d'ouvrir le fichier personnel.dat" << endl;
+		return;
+	}
+
+	int matricule;
+	string nom, profession;
+	double salaire;
+
+	while (fichier >> matricule >> nom >> annee >> salaire >> profession)
+	{
+		totalPaie += salaire * 2 * 40; // Assuming 40 working hours per week
+	}
+
+	fichier.close();
+
+	cout << "+------------------------------------------------------------------------+\n";
+	cout << "|      |         |                    |       Total = |" << setw(14) << fixed << setprecision(2) << totalPaie << " |\n";
+	cout << "+------------------------------------------------------------------------+\n";
 }
 
 /*
@@ -429,6 +441,9 @@ void liste2semaines()
 /*
 Fonction : imprime la liste des employes dans le fichier employees.dat
 */
+/*
+Fonction : imprime la liste des employes dans le fichier employees.dat
+*/
 void listeemployees()
 {
 	ifstream fichier("personnel.dat");
@@ -442,16 +457,46 @@ void listeemployees()
 	int matricule;
 	string nom, profession;
 
-	cout << "\n=====================================\n";
-	cout << "Liste des employe-es\n";
-	cout << "=====================================\n";
-	cout << setw(15) << "Matricule" << setw(20) << "Nom" << setw(20) << "Profession"
-		 << "\n";
-	cout << "--------------------------------------\n";
+	cout << "+===============================================================+\n";
+	cout << "| EMPLOYE-E";
+	cout << setw(7) << " ";
+	cout << "| Matricule";
+	cout << setw(5) << " ";
+	cout << "| Nom";
+	cout << setw(17) << " ";
+	cout << "| Profession";
+	cout << setw(9) << " ";
+	cout << "| Annee de recrutement";
+	cout << setw(2) << " ";
+	cout << "| Salaire horaire";
+	cout << setw(5) << " ";
+	cout << "| Salaire d'une semaine";
+	cout << setw(2) << " ";
+	cout << "|";
+	cout << "\n";
+	cout << "|===============================================================|\n";
+
+	int numero = 1;
 
 	while (fichier >> matricule >> nom >> annee >> salaireh >> profession)
 	{
-		cout << setw(15) << matricule << setw(20) << nom << setw(20) << profession << "\n";
+		double salaireSemaine = salaireh * 40; // Assuming 40 working hours per week
+
+		cout << "| " << setw(7) << numero << " : " << setw(53) << nom << " |"
+			 << "\n";
+		cout << "|---------------------------------------------------------------|\n";
+		cout << "| Matricule             : " << setw(7) << matricule << "                                |\n";
+		cout << "| ------------------------------------------------------------- |\n";
+		cout << "| Profession            : " << setw(35) << profession << " |\n";
+		cout << "| ------------------------------------------------------------- |\n";
+		cout << "| Annee de recrutement  : " << setw(7) << annee << "                                |\n";
+		cout << "| ------------------------------------------------------------- |\n";
+		cout << "| Salaire horaire       : " << setw(7) << fixed << setprecision(2) << salaireh << "                             |\n";
+		cout << "| ------------------------------------------------------------- |\n";
+		cout << "| Salaire d'une semaine : " << setw(7) << fixed << setprecision(2) << salaireSemaine << "                             |\n";
+		cout << "+===============================================================+\n";
+
+		numero++;
 	}
 
 	fichier.close();
